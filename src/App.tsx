@@ -8,6 +8,7 @@ import DayView from './components/DayView'
 import AgendaView from './components/AgendaView'
 import Modal from './components/Modal'
 import CategoryForm from './components/CategoryForm'
+import CategoriesManager from './components/CategoriesManager'
 import TaskForm from './components/TaskForm'
 
 function uid() {
@@ -114,7 +115,7 @@ export default function App() {
             className="rounded-md bg-emerald-600 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-700"
             onClick={() => setShowCategoryModal(true)}
           >
-            + Crear categoría
+            Categorías
           </button>
           <button
             className="rounded-md bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700"
@@ -184,8 +185,21 @@ export default function App() {
         />
       )}
 
-      <Modal open={showCategoryModal} title="Nueva categoría" onClose={() => setShowCategoryModal(false)}>
-        <CategoryForm onSubmit={handleAddCategory} />
+      <Modal open={showCategoryModal} title="Categorías" onClose={() => setShowCategoryModal(false)}>
+        <CategoriesManager
+          categories={state.categories}
+          tasks={state.tasks}
+          onCreate={handleAddCategory}
+          onDelete={(id) => {
+            // bloquear si hay tareas asociadas (también está en UI)
+            const hasTasks = state.tasks.some((t) => t.categoryId === id)
+            if (hasTasks) {
+              alert('No se puede eliminar: hay tareas asignadas a esta categoría.')
+              return
+            }
+            setState((s) => ({ ...s, categories: s.categories.filter((c) => c.id !== id) }))
+          }}
+        />
       </Modal>
 
       <Modal open={showTaskModal.open} title="Nueva tarea" onClose={() => setShowTaskModal({ open: false })}>

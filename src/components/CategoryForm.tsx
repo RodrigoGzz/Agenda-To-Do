@@ -39,7 +39,7 @@ export default function CategoryForm({ onSubmit }: Props) {
             onChange={(e) => setColor(e.target.value)}
             className="h-10 w-16 cursor-pointer rounded border border-gray-300 bg-white"
           />
-          <span className="text-sm text-gray-600">{color}</span>
+          <span className="text-sm text-gray-600"></span>
         </div>
       </div>
 

@@ -12,7 +12,7 @@ export default function Modal({ open, title, onClose, children }: ModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 bg-black/30" onClick={onClose} />
-      <div className="relative z-10 w-[92vw] max-w-lg rounded-xl bg-white p-4 shadow-lg">
+      <div className="relative z-10 w-[95vw] max-w-2xl rounded-xl bg-white p-6 shadow-lg">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-lg font-semibold">{title}</h2>
           <button
