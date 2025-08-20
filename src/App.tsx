@@ -52,7 +52,7 @@ export default function App() {
     const catMap = new Map(state.categories.map((c) => [c.id, c]))
     return state.tasks.map((t) => {
       const cat = catMap.get(t.categoryId)
-      const color = t.customColor || cat?.color || '#64748b'
+  const color = cat?.color || '#64748b'
       const categoryName = cat?.name || 'Sin categoría'
       return { ...t, color, categoryName }
     })
@@ -316,7 +316,6 @@ export default function App() {
               date: editTask.date,
               categoryId: editTask.categoryId,
               description: editTask.description,
-              customColor: editTask.customColor,
             }}
             submitLabel="Guardar cambios"
             onSubmit={(data) => handleUpdateTask(editTask.id, data)}

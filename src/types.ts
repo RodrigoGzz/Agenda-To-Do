@@ -12,7 +12,6 @@ export type Task = {
   date: string // ISO yyyy-mm-dd
   categoryId: ID
   description?: string
-  customColor?: string
   completed?: boolean
 }
 

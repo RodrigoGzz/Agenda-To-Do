@@ -14,24 +14,21 @@ export default function TaskForm({ categories, defaultDate, initial, submitLabel
   const [date, setDate] = useState(initial?.date ?? defaultDate ?? '')
   const [categoryId, setCategoryId] = useState(initial?.categoryId ?? '')
   const [description, setDescription] = useState(initial?.description ?? '')
-  const [customColor, setCustomColor] = useState<string>(initial?.customColor ?? '')
 
   React.useEffect(() => {
     setTitle(initial?.title ?? '')
     setDate(initial?.date ?? defaultDate ?? '')
   setCategoryId(initial?.categoryId ?? '')
     setDescription(initial?.description ?? '')
-    setCustomColor(initial?.customColor ?? '')
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initial?.title, initial?.date, initial?.categoryId, initial?.description, initial?.customColor, defaultDate, categories.length])
+  }, [initial?.title, initial?.date, initial?.categoryId, initial?.description, defaultDate, categories.length])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!title.trim() || !date || !categoryId) return
-    onSubmit({ title: title.trim(), date, categoryId, description: description.trim() || undefined, customColor: customColor || undefined })
+  onSubmit({ title: title.trim(), date, categoryId, description: description.trim() || undefined })
     setTitle('')
     setDescription('')
-    setCustomColor('')
   }
 
   return (
@@ -90,18 +87,7 @@ export default function TaskForm({ categories, defaultDate, initial, submitLabel
         />
       </div>
 
-      <div>
-        <label className="mb-1 block text-sm font-medium">Color personalizado (opcional)</label>
-        <div className="flex items-center gap-3">
-          <input
-            type="color"
-            value={customColor || '#ffffff'}
-            onChange={(e) => setCustomColor(e.target.value)}
-            className="h-10 w-16 cursor-pointer rounded border border-gray-300 bg-white"
-          />
-          <span className="text-sm text-gray-600">{customColor || 'Sin color'}</span>
-        </div>
-      </div>
+  {/* Se removió el color personalizado opcional */}
 
       <button
         type="submit"

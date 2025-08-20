@@ -58,8 +58,8 @@ export default function CategoriesManager({ categories, tasks, onCreate, onDelet
       </div>
 
       <div className="space-y-3">
-        <h3 className="text-sm font-semibold">Crear nueva categoría</h3>
-        <CategoryForm onSubmit={onCreate} />
+  <h3 className="text-sm font-semibold">Crear nueva categoría</h3>
+  <CategoryForm onSubmit={onCreate} usedColors={categories.map((c) => c.color)} />
       </div>
     </div>
   )
