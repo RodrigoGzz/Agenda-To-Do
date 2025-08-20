@@ -95,18 +95,14 @@ export default function AgendaView({ startDate, days = 7, tasks, onPrev, onNext,
                   {dayTasks.map((t) => (
                     <li key={t.id}>
                       <button
-                        className="flex w-full items-center justify-between rounded border px-3 py-2 text-left text-sm hover:bg-gray-50"
+                        className="flex w-full flex-col rounded px-3 py-2 text-left text-sm text-white hover:opacity-90"
+                        style={{ backgroundColor: t.color }}
                         onClick={() => onClickTask(t)}
                         title={`${t.title} — ${t.categoryName}`}
                       >
                         <div className="min-w-0 flex-1">
                           <div className="truncate font-medium">{t.title}</div>
-                          <div className="mt-0.5 flex items-center gap-2 text-xs text-gray-600">
-                            <span className="inline-flex items-center gap-1">
-                              <span className="inline-block h-2 w-2 rounded" style={{ backgroundColor: t.color }} />
-                              {t.categoryName}
-                            </span>
-                          </div>
+                          <div className="mt-0.5 text-xs text-white/80">{t.categoryName}</div>
                         </div>
                       </button>
                     </li>

@@ -48,12 +48,13 @@ export default function DayView({ dayDate, onPrev, onNext, tasks, onClickDayAddT
         {dayTasks.map((t) => (
           <button
             key={t.id}
-            className="flex items-center justify-between rounded border px-3 py-2 text-left text-sm"
+            className="flex w-full flex-col rounded px-3 py-2 text-left text-sm text-white hover:opacity-90"
+            style={{ backgroundColor: t.color }}
             onClick={() => onClickTask(t)}
             title={`${t.title} — ${t.categoryName}`}
           >
             <span className="truncate font-medium">{t.title}</span>
-            <span className="ml-2 h-3 w-3 rounded" style={{ backgroundColor: t.color }} />
+            <span className="mt-0.5 text-xs text-white/80">{t.categoryName}</span>
           </button>
         ))}
       </div>
