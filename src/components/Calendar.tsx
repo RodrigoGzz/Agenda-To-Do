@@ -63,7 +63,7 @@ export default function Calendar({ monthDate, onPrev, onNext, tasks, onClickDayA
                 {dayTasks.map((t) => (
                   <button
                     key={t.id}
-                    className="truncate rounded px-2 py-1 text-left text-xs text-white"
+                    className={`truncate rounded px-2 py-1 text-left text-xs text-white ${t.completed ? 'opacity-70 line-through' : ''}`}
                     style={{ backgroundColor: t.color }}
                     onClick={() => onClickTask(t)}
                     title={`${t.title} — ${t.categoryName}`}

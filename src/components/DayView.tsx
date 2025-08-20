@@ -48,7 +48,7 @@ export default function DayView({ dayDate, onPrev, onNext, tasks, onClickDayAddT
         {dayTasks.map((t) => (
           <button
             key={t.id}
-            className="flex w-full flex-col rounded px-3 py-2 text-left text-sm text-white hover:opacity-90"
+            className={`flex w-full flex-col rounded px-3 py-2 text-left text-sm text-white hover:opacity-90 ${t.completed ? 'opacity-70 line-through' : ''}`}
             style={{ backgroundColor: t.color }}
             onClick={() => onClickTask(t)}
             title={`${t.title} — ${t.categoryName}`}

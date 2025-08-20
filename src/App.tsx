@@ -37,6 +37,7 @@ export default function App() {
     return d
   })
   const [agendaDays, setAgendaDays] = useState(7)
+  const [hideCompleted, setHideCompleted] = useState(false)
 
   const [showCategoryModal, setShowCategoryModal] = useState(false)
   const [showTaskModal, setShowTaskModal] = useState<{ open: boolean; date?: string }>({ open: false })
@@ -57,13 +58,17 @@ export default function App() {
     })
   }, [state])
 
+  const tasksForViews = useMemo(() => {
+    return hideCompleted ? calendarTasks.filter((t) => !t.completed) : calendarTasks
+  }, [calendarTasks, hideCompleted])
+
   const handleAddCategory = (data: Omit<Category, 'id'>) => {
     setState((s) => ({ ...s, categories: [...s.categories, { ...data, id: uid() }] }))
     setShowCategoryModal(false)
   }
 
   const handleAddTask = (data: Omit<Task, 'id'>) => {
-    setState((s) => ({ ...s, tasks: [...s.tasks, { ...data, id: uid() }] }))
+  setState((s) => ({ ...s, tasks: [...s.tasks, { ...data, id: uid(), completed: false }] }))
     setShowTaskModal({ open: false })
   }
 
@@ -80,11 +85,32 @@ export default function App() {
     setShowTaskDetail(null)
   }
 
+  const toggleTaskCompleted = (id: string) => {
+    setState((s) => ({
+      ...s,
+      tasks: s.tasks.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)),
+    }))
+  }
+
   return (
     <div className="mx-auto max-w-5xl p-4">
       <header className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <h1 className="text-2xl font-bold">To-Do Calendar</h1>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-gray-600">Ocultar completadas</span>
+            <button
+              type="button"
+              onClick={() => setHideCompleted((v) => !v)}
+              className={`${hideCompleted ? 'bg-emerald-600' : 'bg-gray-300'} relative inline-flex h-5 w-9 items-center rounded-full transition-colors`}
+              aria-pressed={hideCompleted}
+              aria-label="Ocultar tareas completadas"
+            >
+              <span
+                className={`${hideCompleted ? 'translate-x-4' : 'translate-x-1'} inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform`}
+              />
+            </button>
+          </div>
           <div className="mr-2 inline-flex overflow-hidden rounded-md border">
             <button
               className={`px-3 py-2 text-sm ${view === 'month' ? 'bg-gray-900 text-white' : 'bg-white hover:bg-gray-50'}`}
@@ -131,7 +157,7 @@ export default function App() {
           monthDate={monthDate}
           onPrev={() => setMonthDate((d) => addMonths(d, -1))}
           onNext={() => setMonthDate((d) => addMonths(d, 1))}
-          tasks={calendarTasks}
+          tasks={tasksForViews}
           onClickDayAddTask={(date) => setShowTaskModal({ open: true, date })}
           onClickTask={(task) => {
             setShowTaskDetail(task)
@@ -143,7 +169,7 @@ export default function App() {
         <AgendaView
           startDate={agendaStart}
           days={agendaDays}
-          tasks={calendarTasks}
+          tasks={tasksForViews}
           onPrev={() => setAgendaStart((d) => new Date(d.getFullYear(), d.getMonth(), d.getDate() - agendaDays))}
           onNext={() => setAgendaStart((d) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + agendaDays))}
           onToday={() => setAgendaStart(() => {
@@ -166,7 +192,7 @@ export default function App() {
           weekDate={weekDate}
           onPrev={() => setWeekDate((d) => new Date(d.getFullYear(), d.getMonth(), d.getDate() - 7))}
           onNext={() => setWeekDate((d) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + 7))}
-          tasks={calendarTasks}
+          tasks={tasksForViews}
           onClickDayAddTask={(date) => setShowTaskModal({ open: true, date })}
           onClickTask={(task) => {
             setShowTaskDetail(task)
@@ -179,7 +205,7 @@ export default function App() {
           dayDate={dayDate}
           onPrev={() => setDayDate((d) => new Date(d.getFullYear(), d.getMonth(), d.getDate() - 1))}
           onNext={() => setDayDate((d) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1))}
-          tasks={calendarTasks}
+          tasks={tasksForViews}
           onClickDayAddTask={(date) => setShowTaskModal({ open: true, date })}
           onClickTask={(task) => setShowTaskDetail(task)}
         />
@@ -215,7 +241,9 @@ export default function App() {
         {showTaskDetail && (
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold">{showTaskDetail.title}</h3>
+              <h3 className="text-lg font-semibold">
+                <span className={showTaskDetail.completed ? 'line-through opacity-70' : ''}>{showTaskDetail.title}</span>
+              </h3>
               <span
                 className="badge text-white"
                 style={{ backgroundColor: calendarTasks.find((t) => t.id === showTaskDetail.id)?.color }}
@@ -227,6 +255,34 @@ export default function App() {
             {showTaskDetail.description && (
               <p className="whitespace-pre-wrap text-sm">{showTaskDetail.description}</p>
             )}
+            <div className="pt-1">
+              <button
+                className={
+                  showTaskDetail.completed
+                    ? 'inline-flex items-center gap-2 rounded-md border border-emerald-600 px-3 py-1.5 text-sm font-medium text-emerald-700 hover:bg-emerald-50'
+                    : 'inline-flex items-center gap-2 rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700'
+                }
+                onClick={() => {
+                  toggleTaskCompleted(showTaskDetail.id)
+                  setShowTaskDetail((prev) => (prev ? { ...prev, completed: !prev.completed } : prev))
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="h-4 w-4"
+                  aria-hidden
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.707 5.293a1 1 0 0 1 0 1.414l-7.25 7.25a1 1 0 0 1-1.414 0l-3-3a1 1 0 1 1 1.414-1.414L8.75 11.836l6.543-6.543a1 1 0 0 1 1.414 0Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                {showTaskDetail.completed ? 'Marcar como pendiente' : 'Marcar como completada'}
+              </button>
+            </div>
             <div className="mt-3 flex items-center justify-end gap-2">
               <button
                 className="rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50"

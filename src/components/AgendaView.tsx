@@ -95,7 +95,7 @@ export default function AgendaView({ startDate, days = 7, tasks, onPrev, onNext,
                   {dayTasks.map((t) => (
                     <li key={t.id}>
                       <button
-                        className="flex w-full flex-col rounded px-3 py-2 text-left text-sm text-white hover:opacity-90"
+                        className={`flex w-full flex-col rounded px-3 py-2 text-left text-sm text-white hover:opacity-90 ${t.completed ? 'opacity-70 line-through' : ''}`}
                         style={{ backgroundColor: t.color }}
                         onClick={() => onClickTask(t)}
                         title={`${t.title} — ${t.categoryName}`}

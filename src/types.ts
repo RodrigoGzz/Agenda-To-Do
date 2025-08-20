@@ -13,6 +13,7 @@ export type Task = {
   categoryId: ID
   description?: string
   customColor?: string
+  completed?: boolean
 }
 
 export type AppState = {
