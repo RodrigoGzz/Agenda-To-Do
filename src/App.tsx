@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react'
+import { useAuth } from './auth/AuthContext'
 import { addMonths, formatISODate } from './utils/date'
 import type { AppState, Category, Task } from './types'
 import { loadState, saveState } from './storage'
@@ -22,6 +23,7 @@ const initialState: AppState = loadState() ?? {
 }
 
 export default function App() {
+  const { logout } = useAuth()
   const [state, setState] = useState<AppState>(initialState)
   const [monthDate, setMonthDate] = useState(() => {
     const d = new Date()
@@ -96,7 +98,7 @@ export default function App() {
     <div className="mx-auto max-w-5xl p-4">
       <header className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <h1 className="text-2xl font-bold">To-Do Calendar</h1>
-        <div className="flex items-center gap-3">
+  <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
             <span className="text-xs text-gray-600">Ocultar completadas</span>
             <button
@@ -148,6 +150,12 @@ export default function App() {
             onClick={() => setShowTaskModal({ open: true, date: formatISODate(new Date()) })}
           >
             + Agregar tarea
+          </button>
+          <button
+            className="rounded-md border border-gray-300 px-3 py-2 text-sm hover:bg-gray-50"
+            onClick={logout}
+          >
+            Cerrar sesión
           </button>
         </div>
       </header>
