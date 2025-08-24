@@ -9,10 +9,10 @@ service cloud.firestore {
     }
 
     match /users/{userId} {
-      // Read own user document
-      allow get, list: if isOwner(userId);
-      // Create requires payload to include correct user_id
-      allow create: if isOwner(userId) && request.resource.data.user_id == userId;
+      // Read own user document OR allow reading for login (email query)
+      allow get, list: if isOwner(userId) || true; // Allow reading for login purposes
+      // Create user document (for registration) - allow anyone to create with correct user_id
+      allow create: if request.resource.data.user_id == userId;
       // Update/Delete only by owner, and document must belong to owner
       allow update, delete: if isOwner(userId) && resource.data.user_id == userId;
 

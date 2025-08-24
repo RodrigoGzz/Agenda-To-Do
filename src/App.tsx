@@ -23,7 +23,7 @@ const initialState: AppState = loadState() ?? {
 }
 
 export default function App() {
-  const { logout } = useAuth()
+  const { logout, user } = useAuth()
   const [state, setState] = useState<AppState>(initialState)
   const [monthDate, setMonthDate] = useState(() => {
     const d = new Date()
@@ -45,10 +45,22 @@ export default function App() {
   const [showTaskModal, setShowTaskModal] = useState<{ open: boolean; date?: string }>({ open: false })
   const [showTaskDetail, setShowTaskDetail] = useState<Task | null>(null)
   const [editTask, setEditTask] = useState<Task | null>(null)
+  const [showUserMenu, setShowUserMenu] = useState(false)
 
   React.useEffect(() => {
     saveState(state)
   }, [state])
+
+  // Close user menu when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showUserMenu) {
+        setShowUserMenu(false)
+      }
+    }
+    document.addEventListener('click', handleClickOutside)
+    return () => document.removeEventListener('click', handleClickOutside)
+  }, [showUserMenu])
 
   const calendarTasks = useMemo(() => {
     const catMap = new Map(state.categories.map((c) => [c.id, c]))
@@ -97,8 +109,11 @@ export default function App() {
   return (
     <div className="mx-auto max-w-5xl p-4">
       <header className="mb-4 flex flex-wrap items-center justify-between gap-2">
-        <h1 className="text-2xl font-bold">To-Do Calendar</h1>
-  <div className="flex items-center gap-3">
+        <div>
+          <h1 className="text-2xl font-bold">To-Do Calendar</h1>
+          
+        </div>
+        <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
             <span className="text-xs text-gray-600">Ocultar completadas</span>
             <button
@@ -151,12 +166,32 @@ export default function App() {
           >
             + Agregar tarea
           </button>
-          <button
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm hover:bg-gray-50"
-            onClick={logout}
-          >
-            Cerrar sesión
-          </button>
+          <div className="relative">
+            <button
+              className="rounded-md border border-gray-300 px-3 py-2 text-sm hover:bg-gray-50"
+              onClick={(e) => {
+                e.stopPropagation()
+                setShowUserMenu(!showUserMenu)
+              }}
+            >
+              {user?.name} ▼
+            </button>
+            {showUserMenu && (
+              <div className="absolute right-0 top-full mt-1 w-48 rounded-md border border-gray-200 bg-white py-1 shadow-lg z-10">
+                <button
+                  className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50"
+                  onClick={() => {
+                    if (window.confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+                      logout()
+                    }
+                    setShowUserMenu(false)
+                  }}
+                >
+                  Cerrar sesión
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 

@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 
 export default function LoginPage() {
-  const { login } = useAuth()
+  const { login, loading: authLoading } = useAuth()
   const navigate = useNavigate()
   const location = useLocation() as any
   const from = location.state?.from?.pathname || '/'
@@ -12,6 +12,8 @@ export default function LoginPage() {
   const [password, setPassword] = React.useState('')
   const [loading, setLoading] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
+
+  const isLoading = loading || authLoading
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -54,10 +56,10 @@ export default function LoginPage() {
         {error && <p className="text-sm text-red-600">{error}</p>}
         <button
           type="submit"
-          disabled={loading}
+          disabled={isLoading}
           className="w-full rounded-md bg-blue-600 px-3 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-60"
         >
-          {loading ? 'Ingresando…' : 'Ingresar'}
+          {isLoading ? 'Ingresando…' : 'Ingresar'}
         </button>
       </form>
       <p className="mt-4 text-center text-sm text-gray-600">

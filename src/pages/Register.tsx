@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 
 export default function RegisterPage() {
-  const { register } = useAuth()
+  const { register, loading: authLoading } = useAuth()
   const navigate = useNavigate()
   const [name, setName] = React.useState('')
   const [lastName, setLastName] = React.useState('')
@@ -11,6 +11,8 @@ export default function RegisterPage() {
   const [password, setPassword] = React.useState('')
   const [loading, setLoading] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
+
+  const isLoading = loading || authLoading
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -71,10 +73,10 @@ export default function RegisterPage() {
         {error && <p className="text-sm text-red-600">{error}</p>}
         <button
           type="submit"
-          disabled={loading}
+          disabled={isLoading}
           className="w-full rounded-md bg-emerald-600 px-3 py-2 font-medium text-white hover:bg-emerald-700 disabled:opacity-60"
         >
-          {loading ? 'Creando…' : 'Crear cuenta'}
+          {isLoading ? 'Creando…' : 'Crear cuenta'}
         </button>
       </form>
       <p className="mt-4 text-center text-sm text-gray-600">
