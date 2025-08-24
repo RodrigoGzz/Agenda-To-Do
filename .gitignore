@@ -4,3 +4,4 @@ node_modules
 vite.svg
 coverage
 dist
+backend/firebaseClient.ts
