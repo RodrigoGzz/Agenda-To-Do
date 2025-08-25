@@ -7,6 +7,7 @@ import { AuthProvider } from './auth/AuthContext'
 import ProtectedRoute from './auth/ProtectedRoute'
 import LoginPage from './pages/Login'
 import RegisterPage from './pages/Register'
+import NotesPage from './pages/Notes'
 
 const container = document.getElementById('root')
 if (!container) throw new Error('No root element found')
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
     element: <ProtectedRoute />,
     children: [
       { path: '/', element: <App /> },
+      { path: '/notes', element: <NotesPage /> },
     ],
   },
   { path: '/login', element: <LoginPage /> },

@@ -35,6 +35,16 @@ service cloud.firestore {
         // allow create: if isOwner(userId) && request.resource.data.user_id == userId;
         // allow update, delete: if isOwner(userId) && resource.data.user_id == userId;
       }
+
+      // Subcollection: note (notes)
+      match /note/{noteId} {
+        // Temporarily allow all operations for notes (remove auth requirement for now)
+        allow read, write: if true;
+        // TODO: Restore proper auth when Firebase Auth is fully integrated
+        // allow get, list: if isOwner(userId);
+        // allow create: if isOwner(userId) && request.resource.data.user_id == userId;
+        // allow update, delete: if isOwner(userId) && resource.data.user_id == userId;
+      }
     }
   }
 }

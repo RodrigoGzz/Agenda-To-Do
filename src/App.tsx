@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { useAuth } from './auth/AuthContext'
 import { addMonths, formatISODate } from './utils/date'
 import type { AppState, Category, Task } from './types'
@@ -254,6 +255,14 @@ export default function App() {
             </button>
             {showUserMenu && (
               <div className="absolute right-0 top-full mt-1 w-48 rounded-md border border-gray-200 bg-white py-1 shadow-lg z-10">
+                <Link
+                  to="/notes"
+                  className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
+                  onClick={() => setShowUserMenu(false)}
+                >
+                  📝 Mis Notas
+                </Link>
+                <div className="border-t border-gray-100 my-1"></div>
                 <button
                   className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50"
                   onClick={() => {
