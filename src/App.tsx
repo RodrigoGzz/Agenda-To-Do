@@ -1,8 +1,9 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import { useAuth } from './auth/AuthContext'
 import { addMonths, formatISODate } from './utils/date'
 import type { AppState, Category, Task } from './types'
 import { loadState, saveState } from './storage'
+import { listCategories, createCategory, deleteCategory, listTasks, createTask, updateTask, deleteTask } from '../backend/firestore'
 import Calendar from './components/Calendar'
 import WeekCalendar from './components/WeekCalendar'
 import DayView from './components/DayView'
@@ -25,6 +26,8 @@ const initialState: AppState = loadState() ?? {
 export default function App() {
   const { logout, user } = useAuth()
   const [state, setState] = useState<AppState>(initialState)
+  const [categoriesLoading, setCategoriesLoading] = useState(false)
+  const [tasksLoading, setTasksLoading] = useState(false)
   const [monthDate, setMonthDate] = useState(() => {
     const d = new Date()
     d.setDate(1)
@@ -46,6 +49,40 @@ export default function App() {
   const [showTaskDetail, setShowTaskDetail] = useState<Task | null>(null)
   const [editTask, setEditTask] = useState<Task | null>(null)
   const [showUserMenu, setShowUserMenu] = useState(false)
+
+  // Load categories from Firebase when user is available
+  useEffect(() => {
+    if (user?.id) {
+      loadCategories()
+      loadTasks()
+    }
+  }, [user?.id])
+
+  const loadCategories = async () => {
+    if (!user?.id) return
+    setCategoriesLoading(true)
+    try {
+      const categories = await listCategories(user.id)
+      setState(s => ({ ...s, categories }))
+    } catch (error) {
+      console.error('Error loading categories:', error)
+    } finally {
+      setCategoriesLoading(false)
+    }
+  }
+
+  const loadTasks = async () => {
+    if (!user?.id) return
+    setTasksLoading(true)
+    try {
+      const tasks = await listTasks(user.id)
+      setState(s => ({ ...s, tasks }))
+    } catch (error) {
+      console.error('Error loading tasks:', error)
+    } finally {
+      setTasksLoading(false)
+    }
+  }
 
   React.useEffect(() => {
     saveState(state)
@@ -76,34 +113,73 @@ export default function App() {
     return hideCompleted ? calendarTasks.filter((t) => !t.completed) : calendarTasks
   }, [calendarTasks, hideCompleted])
 
-  const handleAddCategory = (data: Omit<Category, 'id'>) => {
-    setState((s) => ({ ...s, categories: [...s.categories, { ...data, id: uid() }] }))
-    setShowCategoryModal(false)
+  const handleAddCategory = async (data: Omit<Category, 'id'>) => {
+    if (!user?.id) return
+    try {
+      const newCategory = await createCategory(user.id, data)
+      setState((s) => ({ ...s, categories: [...s.categories, newCategory] }))
+      setShowCategoryModal(false)
+    } catch (error) {
+      console.error('Error creating category:', error)
+      alert('Error al crear la categoría')
+    }
   }
 
-  const handleAddTask = (data: Omit<Task, 'id'>) => {
-  setState((s) => ({ ...s, tasks: [...s.tasks, { ...data, id: uid(), completed: false }] }))
-    setShowTaskModal({ open: false })
+  const handleAddTask = async (data: Omit<Task, 'id'>) => {
+    if (!user?.id) return
+    try {
+      const newTask = await createTask(user.id, { ...data, completed: false })
+      setState((s) => ({ ...s, tasks: [...s.tasks, newTask] }))
+      setShowTaskModal({ open: false })
+    } catch (error) {
+      console.error('Error creating task:', error)
+      alert('Error al crear la tarea')
+    }
   }
 
-  const handleUpdateTask = (id: string, data: Omit<Task, 'id'>) => {
-    setState((s) => ({
-      ...s,
-      tasks: s.tasks.map((t) => (t.id === id ? { ...t, ...data } : t)),
-    }))
-    setEditTask(null)
+  const handleUpdateTask = async (id: string, data: Omit<Task, 'id'>) => {
+    if (!user?.id) return
+    try {
+      await updateTask(user.id, id, data)
+      setState((s) => ({
+        ...s,
+        tasks: s.tasks.map((t) => (t.id === id ? { ...t, ...data } : t)),
+      }))
+      setEditTask(null)
+    } catch (error) {
+      console.error('Error updating task:', error)
+      alert('Error al actualizar la tarea')
+    }
   }
 
-  const handleDeleteTask = (id: string) => {
-    setState((s) => ({ ...s, tasks: s.tasks.filter((t) => t.id !== id) }))
-    setShowTaskDetail(null)
+  const handleDeleteTask = async (id: string) => {
+    if (!user?.id) return
+    try {
+      await deleteTask(user.id, id)
+      setState((s) => ({ ...s, tasks: s.tasks.filter((t) => t.id !== id) }))
+      setShowTaskDetail(null)
+    } catch (error) {
+      console.error('Error deleting task:', error)
+      alert('Error al eliminar la tarea')
+    }
   }
 
-  const toggleTaskCompleted = (id: string) => {
-    setState((s) => ({
-      ...s,
-      tasks: s.tasks.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)),
-    }))
+  const toggleTaskCompleted = async (id: string) => {
+    if (!user?.id) return
+    const task = state.tasks.find(t => t.id === id)
+    if (!task) return
+    
+    try {
+      // Only update the completed field, not the entire task
+      await updateTask(user.id, id, { completed: !task.completed })
+      setState((s) => ({
+        ...s,
+        tasks: s.tasks.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)),
+      }))
+    } catch (error) {
+      console.error('Error toggling task completion:', error)
+      alert('Error al actualizar el estado de la tarea')
+    }
   }
 
   return (
@@ -195,6 +271,12 @@ export default function App() {
         </div>
       </header>
 
+      {(categoriesLoading || tasksLoading) && (
+        <div className="mb-4 rounded-md bg-blue-50 p-3 text-center text-sm text-blue-700">
+          Cargando datos...
+        </div>
+      )}
+
       {view === 'month' && (
         <Calendar
           monthDate={monthDate}
@@ -255,20 +337,33 @@ export default function App() {
       )}
 
       <Modal open={showCategoryModal} title="Categorías" onClose={() => setShowCategoryModal(false)}>
-        <CategoriesManager
-          categories={state.categories}
-          tasks={state.tasks}
-          onCreate={handleAddCategory}
-          onDelete={(id) => {
-            // bloquear si hay tareas asociadas (también está en UI)
-            const hasTasks = state.tasks.some((t) => t.categoryId === id)
-            if (hasTasks) {
-              alert('No se puede eliminar: hay tareas asignadas a esta categoría.')
-              return
-            }
-            setState((s) => ({ ...s, categories: s.categories.filter((c) => c.id !== id) }))
-          }}
-        />
+        {categoriesLoading ? (
+          <div className="py-4 text-center text-sm text-gray-600">
+            Cargando categorías...
+          </div>
+        ) : (
+          <CategoriesManager
+            categories={state.categories}
+            tasks={state.tasks}
+            onCreate={handleAddCategory}
+            onDelete={async (id) => {
+              // bloquear si hay tareas asociadas (también está en UI)
+              const hasTasks = state.tasks.some((t) => t.categoryId === id)
+              if (hasTasks) {
+                alert('No se puede eliminar: hay tareas asignadas a esta categoría.')
+                return
+              }
+              if (!user?.id) return
+              try {
+                await deleteCategory(user.id, id)
+                setState((s) => ({ ...s, categories: s.categories.filter((c) => c.id !== id) }))
+              } catch (error) {
+                console.error('Error deleting category:', error)
+                alert('Error al eliminar la categoría')
+              }
+            }}
+          />
+        )}
       </Modal>
 
       <Modal open={showTaskModal.open} title="Nueva tarea" onClose={() => setShowTaskModal({ open: false })}>

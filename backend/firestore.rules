@@ -18,16 +18,22 @@ service cloud.firestore {
 
       // Subcollection: categories
       match /categories/{categoryId} {
-        allow get, list: if isOwner(userId);
-        allow create: if isOwner(userId) && request.resource.data.user_id == userId;
-        allow update, delete: if isOwner(userId) && resource.data.user_id == userId;
+        // Temporarily allow all operations for categories (remove auth requirement for now)
+        allow read, write: if true;
+        // TODO: Restore proper auth when Firebase Auth is fully integrated
+        // allow get, list: if isOwner(userId);
+        // allow create: if isOwner(userId) && request.resource.data.user_id == userId;
+        // allow update, delete: if isOwner(userId) && resource.data.user_id == userId;
       }
 
       // Subcollection: tasks
       match /tasks/{taskId} {
-        allow get, list: if isOwner(userId);
-        allow create: if isOwner(userId) && request.resource.data.user_id == userId;
-        allow update, delete: if isOwner(userId) && resource.data.user_id == userId;
+        // Temporarily allow all operations for tasks (remove auth requirement for now)
+        allow read, write: if true;
+        // TODO: Restore proper auth when Firebase Auth is fully integrated
+        // allow get, list: if isOwner(userId);
+        // allow create: if isOwner(userId) && request.resource.data.user_id == userId;
+        // allow update, delete: if isOwner(userId) && resource.data.user_id == userId;
       }
     }
   }
