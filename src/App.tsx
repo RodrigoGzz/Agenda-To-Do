@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from './auth/AuthContext'
 import { addMonths, formatISODate } from './utils/date'
 import type { AppState, Category, Task } from './types'
-import { loadState, saveState } from './storage'
+import { loadState, saveState, loadUserPreferences, saveUserPreferences } from './storage'
 import { listCategories, createCategory, deleteCategory, listTasks, createTask, updateTask, deleteTask } from '../backend/firestore'
 import Calendar from './components/Calendar'
 import WeekCalendar from './components/WeekCalendar'
@@ -36,14 +36,20 @@ export default function App() {
   })
   const [weekDate, setWeekDate] = useState(new Date())
   const [dayDate, setDayDate] = useState(new Date())
-  const [view, setView] = useState<'month' | 'week' | 'day' | 'agenda'>('month')
+  const [view, setView] = useState<'month' | 'week' | 'day' | 'agenda'>(() => {
+    const prefs = loadUserPreferences()
+    return prefs.view
+  })
   const [agendaStart, setAgendaStart] = useState(() => {
     const d = new Date()
     d.setHours(0, 0, 0, 0)
     return d
   })
   const [agendaDays, setAgendaDays] = useState(7)
-  const [hideCompleted, setHideCompleted] = useState(false)
+  const [hideCompleted, setHideCompleted] = useState(() => {
+    const prefs = loadUserPreferences()
+    return prefs.hideCompleted
+  })
 
   const [showCategoryModal, setShowCategoryModal] = useState(false)
   const [showTaskModal, setShowTaskModal] = useState<{ open: boolean; date?: string }>({ open: false })
@@ -58,6 +64,11 @@ export default function App() {
       loadTasks()
     }
   }, [user?.id])
+
+  // Save user preferences when view changes
+  useEffect(() => {
+    saveUserPreferences({ view, hideCompleted })
+  }, [view, hideCompleted])
 
   const loadCategories = async () => {
     if (!user?.id) return
