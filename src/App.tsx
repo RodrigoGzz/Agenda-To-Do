@@ -356,10 +356,12 @@ export default function App() {
             tasks={state.tasks}
             onCreate={handleAddCategory}
             onDelete={async (id) => {
-              // bloquear si hay tareas asociadas (también está en UI)
-              const hasTasks = state.tasks.some((t) => t.categoryId === id)
-              if (hasTasks) {
-                alert('No se puede eliminar: hay tareas asignadas a esta categoría.')
+              // Permitir eliminar si no hay tareas O si todas están completadas
+              const categoryTasks = state.tasks.filter((t) => t.categoryId === id)
+              const hasPendingTasks = categoryTasks.some((t) => !t.completed)
+              
+              if (hasPendingTasks) {
+                alert('No se puede eliminar: hay tareas pendientes en esta categoría.')
                 return
               }
               if (!user?.id) return

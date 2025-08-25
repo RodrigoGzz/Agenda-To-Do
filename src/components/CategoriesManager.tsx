@@ -16,6 +16,19 @@ export default function CategoriesManager({ categories, tasks, onCreate, onDelet
     return m
   }, [tasks])
 
+  const taskStatusByCat = React.useMemo(() => {
+    const m = new Map<string, { total: number, completed: number }>()
+    for (const t of tasks) {
+      const categoryId = t.categoryId
+      const current = m.get(categoryId) || { total: 0, completed: 0 }
+      m.set(categoryId, {
+        total: current.total + 1,
+        completed: current.completed + (t.completed ? 1 : 0)
+      })
+    }
+    return m
+  }, [tasks])
+
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       <div className="space-y-3">
@@ -29,13 +42,19 @@ export default function CategoriesManager({ categories, tasks, onCreate, onDelet
             <ul className="space-y-2">
               {categories.map((c) => {
               const count = taskCountByCat.get(c.id) || 0
-              const canDelete = count === 0
+              const status = taskStatusByCat.get(c.id) || { total: 0, completed: 0 }
+              const allCompleted = status.total > 0 && status.completed === status.total
+              const canDelete = count === 0 || allCompleted
               return (
                 <li key={c.id} className="flex items-center justify-between rounded border px-3 py-2">
                   <div className="flex min-w-0 items-center gap-3">
                     <span className="h-4 w-4 rounded" style={{ backgroundColor: c.color }} />
                     <span className="truncate font-medium">{c.name}</span>
-                    <span className="text-xs text-gray-500">{count} tareas</span>
+                    <span className="text-xs text-gray-500">
+                      {count === 0 ? '0 tareas' : 
+                       allCompleted ? `${count} completadas` : 
+                       `${status.completed}/${status.total} completadas`}
+                    </span>
                   </div>
                   <button
                     className={`rounded px-2 py-1 text-xs ${canDelete ? 'bg-red-600 text-white hover:bg-red-700' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
@@ -45,7 +64,7 @@ export default function CategoriesManager({ categories, tasks, onCreate, onDelet
                       if (ok) onDelete(c.id)
                     }}
                     disabled={!canDelete}
-                    title={canDelete ? 'Eliminar categoría' : 'No se puede eliminar: hay tareas asignadas'}
+                    title={canDelete ? 'Eliminar categoría' : 'No se puede eliminar: hay tareas pendientes'}
                   >
                     Eliminar
                   </button>
