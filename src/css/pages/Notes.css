@@ -14,6 +14,9 @@
 .notes__title {
 	@apply text-2xl font-bold;
 }
+.notes__search { @apply hidden md:flex items-center gap-2 ml-4; }
+.notes__searchInput { @apply w-64 rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none; }
+.notes__clearBtn { @apply ml-1 rounded-md border border-gray-300 px-2 py-1 text-sm text-gray-500 hover:bg-gray-50; }
 .notes__newBtn {
 	@apply rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700;
 }

@@ -10,6 +10,7 @@ export default function NotesPage() {
   const [loading, setLoading] = useState(true)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [editingNote, setEditingNote] = useState<Note | null>(null)
+  const [query, setQuery] = useState('')
 
   // Function to detect and extract copyable text patterns
   const extractCopyableText = (text: string) => {
@@ -63,6 +64,21 @@ export default function NotesPage() {
       return content.trim()
     })
   }
+
+  // Normalize strings for case/diacritic-insensitive search
+  const normalizeForSearch = (s: string) =>
+    s
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+
+  const filteredNotes = notes.filter((note) => {
+    const q = normalizeForSearch(query)
+    if (!q) return true
+    const title = normalizeForSearch(note.title || '')
+    const content = normalizeForSearch(cleanDisplayText(note.noteDescription || ''))
+  return title.includes(q) || content.includes(q)
+  })
 
   useEffect(() => {
     if (user?.id) {
@@ -166,6 +182,25 @@ export default function NotesPage() {
             Volver al Calendario
           </Link>
           <h1 className="notes__title">Mis Notas</h1>
+          <div className="notes__search">
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="notes__searchInput"
+              placeholder={'Buscar en título o contenido...'}
+            />
+            {query && (
+              <button
+                type="button"
+                className="notes__clearBtn"
+                onClick={() => setQuery('')}
+                aria-label="Limpiar búsqueda"
+                title="Limpiar búsqueda"
+              >
+                ×
+              </button>
+            )}
+          </div>
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
@@ -185,9 +220,21 @@ export default function NotesPage() {
             Crear tu primera nota
           </button>
         </div>
+      ) : filteredNotes.length === 0 ? (
+        <div className="notes__empty">
+          <p className="notes__emptyText">No hay notas que coincidan con la búsqueda o filtro</p>
+          {query && (
+            <button
+              onClick={() => setQuery('')}
+              className="notes__emptyLink"
+            >
+              Limpiar búsqueda
+            </button>
+          )}
+        </div>
       ) : (
         <div className="notes__grid">
-          {notes
+          {[...filteredNotes]
             .sort((a, b) => {
               // First sort by pinned status (pinned notes first)
               if (a.pinned && !b.pinned) return -1
