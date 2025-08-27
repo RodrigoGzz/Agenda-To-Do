@@ -1,4 +1,5 @@
 import React from 'react'
+import '@/css/components/CategoriesManager.css'
 import type { Category, Task } from '@/types'
 import CategoryForm from './CategoryForm'
 

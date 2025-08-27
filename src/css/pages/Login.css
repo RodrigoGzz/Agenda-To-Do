@@ -1,0 +1,33 @@
+/* Styles for Login page */
+
+.login {
+	@apply mx-auto flex min-h-screen max-w-md flex-col justify-center p-4;
+}
+.login__title {
+	@apply mb-6 text-center text-2xl font-bold;
+}
+.login__form {
+	@apply space-y-3;
+}
+.login__labelWrap {
+	@apply block;
+}
+.login__label {
+	@apply mb-1 block text-sm;
+}
+.login__input {
+	@apply w-full rounded-md border px-3 py-2;
+}
+.login__error {
+	@apply text-sm text-red-600;
+}
+.login__submit {
+	@apply w-full rounded-md bg-blue-600 px-3 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-60;
+}
+.login__footer {
+	@apply mt-4 text-center text-sm text-gray-600;
+}
+.login__link {
+	@apply text-blue-600 hover:underline;
+}
+

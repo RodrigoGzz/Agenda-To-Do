@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import '@/css/components/CategoryForm.css'
 import type { Category } from '@/types'
 
 type Props = {
@@ -85,11 +86,11 @@ export default function CategoryForm({ onSubmit, usedColors }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3">
+    <form onSubmit={handleSubmit} className="category-form">
       <div>
-        <label className="mb-1 block text-sm font-medium">Nombre</label>
+        <label className="category-form__label">Nombre</label>
         <input
-          className="w-full rounded-md border border-gray-300 p-2 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="category-form__input"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Ej. Trabajo"
@@ -98,12 +99,12 @@ export default function CategoryForm({ onSubmit, usedColors }: Props) {
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium">Color</label>
+        <label className="category-form__label">Color</label>
         <div className="relative inline-block" ref={popoverRef}>
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="inline-flex items-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="color-popover__button"
             aria-haspopup="listbox"
             aria-expanded={open}
             aria-label="Seleccionar color"
@@ -120,9 +121,9 @@ export default function CategoryForm({ onSubmit, usedColors }: Props) {
             </svg>
           </button>
           {open && (
-            <div className="absolute z-20 mt-2 w-[28rem] rounded-lg border border-gray-200 bg-white p-4 shadow-lg">
+            <div className="color-popover__panel">
               <div>
-                <div className="grid grid-cols-10 gap-3">
+                <div className="color-popover__grid">
                   {palette.map((p) => (
                     <button
                       key={p.hex}
@@ -132,7 +133,7 @@ export default function CategoryForm({ onSubmit, usedColors }: Props) {
                         setColor(p.hex)
                         setOpen(false)
                       }}
-                      className={`relative h-9 w-9 rounded-full border transition focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      className={`color-popover__swatch ${
                         color === p.hex ? 'ring-2 ring-offset-2 ring-blue-500' : ''
                       } ${usedSet.has(p.hex.toLowerCase()) ? 'cursor-not-allowed' : ''}`}
                       style={{ backgroundColor: p.hex, opacity: usedSet.has(p.hex.toLowerCase()) ? 0.35 : 1 }}
@@ -181,7 +182,7 @@ export default function CategoryForm({ onSubmit, usedColors }: Props) {
       <button
         type="submit"
         disabled={palette.every((p) => usedSet.has(p.hex.toLowerCase()))}
-        className="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+        className="category-form__submit"
       >
         Crear categoría
       </button>

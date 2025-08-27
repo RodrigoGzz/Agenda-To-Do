@@ -1,0 +1,30 @@
+/* Styles for DayView component */
+
+.dayview {
+	@apply rounded-xl border border-gray-200 bg-white p-4 shadow-sm;
+}
+.dayview__toolbar {
+	@apply mb-3 flex items-center justify-between;
+}
+.dayview__toolbarBtn {
+	@apply rounded-md border px-3 py-1 text-sm hover:bg-gray-50;
+}
+.dayview__addBtnWrap {
+	@apply mb-3 flex justify-end;
+}
+.dayview__addBtn {
+	@apply rounded bg-gray-100 px-3 py-1 text-sm text-gray-700 hover:bg-gray-200;
+}
+.dayview__empty {
+	@apply rounded border border-dashed p-4 text-center text-sm text-gray-500;
+}
+.dayview__tasks {
+	@apply flex flex-col gap-2;
+}
+.dayview__taskBtn {
+	@apply flex w-full flex-col rounded px-3 py-2 text-left text-sm text-white hover:opacity-90;
+}
+.dayview__taskBtn--completed {
+	@apply opacity-70 line-through;
+}
+

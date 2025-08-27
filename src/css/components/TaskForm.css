@@ -1,0 +1,24 @@
+/* Styles for TaskForm component */
+
+.task-form {
+	@apply space-y-3;
+}
+
+.task-form__label {
+	@apply mb-1 block text-sm font-medium;
+}
+
+.task-form__input,
+.task-form__select,
+.task-form__textarea {
+	@apply w-full rounded-md border border-gray-300 p-2 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.task-form__grid {
+	@apply grid grid-cols-1 gap-3 sm:grid-cols-2;
+}
+
+.task-form__submit {
+	@apply w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700;
+}
+

@@ -1,0 +1,71 @@
+/* Styles for Notes page */
+
+.notes {
+	@apply mx-auto max-w-6xl p-4;
+}
+.notes__toolbar {
+	@apply mb-6 flex items-center justify-between;
+}
+.notes__left { @apply flex items-center gap-4; }
+.notes__backBtn {
+	@apply flex items-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm hover:bg-gray-50;
+}
+.notes__backIcon { @apply h-4 w-4; }
+.notes__title {
+	@apply text-2xl font-bold;
+}
+.notes__newBtn {
+	@apply rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700;
+}
+.notes__loading { @apply mx-auto max-w-4xl p-4; }
+.notes__loadingInner { @apply text-center py-8; }
+.notes__loadingText { @apply text-gray-600; }
+.notes__empty {
+	@apply text-center py-12;
+}
+.notes__emptyText { @apply text-gray-500 mb-4; }
+.notes__emptyLink { @apply text-blue-600 hover:underline; }
+.notes__grid { @apply grid gap-6 md:grid-cols-1 lg:grid-cols-2; }
+.note {
+	@apply rounded-lg border border-gray-200 bg-white p-6 shadow-sm min-h-[200px];
+}
+.note__header { @apply mb-3 flex items-start justify-between; }
+.note__icons { @apply flex gap-2 ml-3; }
+.note__title { @apply font-medium text-gray-900 text-lg; }
+.note__icon { @apply h-5 w-5; }
+.note__iconBtn { @apply text-gray-400 hover:text-blue-600; }
+.note__iconBtn--pinActive { @apply text-blue-600 hover:text-blue-700; }
+.note__iconBtn--danger { @apply text-gray-400 hover:text-red-600; }
+.note__content { @apply mb-4 flex-1; }
+.note__contentText { @apply text-sm text-gray-600 whitespace-pre-wrap leading-relaxed; }
+.note__copySection { @apply mb-4 border-t pt-3; }
+.note__copyLabel { @apply text-xs font-medium text-gray-500 mb-2; }
+.note__copyList { @apply flex flex-wrap gap-2; }
+.note__copyBtn { @apply inline-flex items-center gap-1 rounded bg-gray-100 px-2 py-1 text-xs text-gray-700 hover:bg-blue-100 hover:text-blue-700; }
+.note__copyIcon { @apply h-3 w-3; }
+.note__date { @apply text-xs text-gray-400; }
+
+.notemodal__overlay { @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50; }
+.notemodal__dialog { @apply bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto; }
+.notemodal__header { @apply sticky top-0 bg-white border-b px-6 py-4; }
+.notemodal__headerRow { @apply flex items-center justify-between; }
+.notemodal__title { @apply text-lg font-semibold; }
+.notemodal__close { @apply text-gray-400 hover:text-gray-600; }
+.notemodal__closeIcon { @apply h-6 w-6; }
+.notemodal__form { @apply p-6; }
+.notemodal__field { @apply mb-4; }
+.notemodal__label { @apply block text-sm font-medium text-gray-700 mb-2; }
+.notemodal__input { @apply w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none; }
+.notemodal__textarea { @apply w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none; }
+.notemodal__toggleCopy { @apply text-sm text-blue-600 hover:underline; }
+.notemodal__copyBox { @apply mb-3 p-3 bg-gray-50 rounded-md; }
+.notemodal__copyLabel { @apply block text-xs font-medium text-gray-600 mb-1; }
+.notemodal__copyFields { @apply space-y-2; }
+.notemodal__copyInput { @apply w-full rounded border px-2 py-1 text-sm; }
+.notemodal__copyRow { @apply flex gap-2; }
+.notemodal__copyNameInput { @apply flex-1 rounded border px-2 py-1 text-sm; }
+.notemodal__insertBtn { @apply rounded bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700; }
+.notemodal__actions { @apply flex gap-3 justify-end; }
+.notemodal__btn { @apply rounded-md border border-gray-300 px-4 py-2 text-sm hover:bg-gray-50; }
+.notemodal__save { @apply rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700; }
+

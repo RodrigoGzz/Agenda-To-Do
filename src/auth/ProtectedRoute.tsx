@@ -1,4 +1,5 @@
 import React from 'react'
+import '@/css/components/ProtectedRoute.css'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from './AuthContext'
 

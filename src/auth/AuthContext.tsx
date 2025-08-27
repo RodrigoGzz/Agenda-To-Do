@@ -1,4 +1,5 @@
 import React from 'react'
+import '@/css/components/AuthContext.css'
 import { registerUser, loginUser } from '../../backend/auth'
 
 export type User = { id: string; email: string; name?: string; lastName?: string }

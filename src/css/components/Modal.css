@@ -1,0 +1,26 @@
+/* Styles for Modal component */
+
+.modal {
+	@apply fixed inset-0 z-50 flex items-center justify-center;
+}
+
+.modal__backdrop {
+	@apply absolute inset-0 bg-black/30;
+}
+
+.modal__dialog {
+	@apply relative z-10 w-[95vw] max-w-2xl rounded-xl bg-white p-6 shadow-lg;
+}
+
+.modal__header {
+	@apply mb-3 flex items-center justify-between;
+}
+
+.modal__title {
+	@apply text-lg font-semibold;
+}
+
+.modal__close {
+	@apply rounded-md p-1 text-gray-500 hover:bg-gray-100;
+}
+

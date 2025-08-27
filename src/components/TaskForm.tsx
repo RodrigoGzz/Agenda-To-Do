@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import '@/css/components/TaskForm.css'
 import type { Category, Task } from '@/types'
 
 type Props = {
@@ -32,11 +33,11 @@ export default function TaskForm({ categories, defaultDate, initial, submitLabel
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3">
+    <form onSubmit={handleSubmit} className="task-form">
       <div>
-        <label className="mb-1 block text-sm font-medium">Título</label>
+        <label className="task-form__label">Título</label>
         <input
-          className="w-full rounded-md border border-gray-300 p-2 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="task-form__input"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Ej. Entregar informe"
@@ -44,12 +45,12 @@ export default function TaskForm({ categories, defaultDate, initial, submitLabel
         />
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div className="task-form__grid">
         <div>
-          <label className="mb-1 block text-sm font-medium">Fecha</label>
+          <label className="task-form__label">Fecha</label>
           <input
             type="date"
-            className="w-full rounded-md border border-gray-300 p-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="task-form__input"
             value={date}
             onChange={(e) => setDate(e.target.value)}
             required
@@ -57,9 +58,9 @@ export default function TaskForm({ categories, defaultDate, initial, submitLabel
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">Categoría</label>
+          <label className="task-form__label">Categoría</label>
           <select
-            className="w-full rounded-md border border-gray-300 p-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="task-form__select"
             value={categoryId}
             onChange={(e) => setCategoryId(e.target.value)}
             required
@@ -77,9 +78,9 @@ export default function TaskForm({ categories, defaultDate, initial, submitLabel
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium">Descripción (opcional)</label>
+        <label className="task-form__label">Descripción (opcional)</label>
         <textarea
-          className="w-full rounded-md border border-gray-300 p-2 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="task-form__textarea"
           rows={3}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -91,7 +92,7 @@ export default function TaskForm({ categories, defaultDate, initial, submitLabel
 
       <button
         type="submit"
-        className="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
+        className="task-form__submit"
       >
         {submitLabel ?? 'Agregar tarea'}
       </button>

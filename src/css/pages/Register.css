@@ -1,0 +1,19 @@
+/* Styles for Register page */
+
+.register {
+	@apply mx-auto flex min-h-screen max-w-md flex-col justify-center p-4;
+}
+.register__title {
+	@apply mb-6 text-center text-2xl font-bold;
+}
+.register__form {
+	@apply space-y-3;
+}
+.register__labelWrap { @apply block; }
+.register__label { @apply mb-1 block text-sm; }
+.register__input { @apply w-full rounded-md border px-3 py-2; }
+.register__error { @apply text-sm text-red-600; }
+.register__submit { @apply w-full rounded-md bg-emerald-600 px-3 py-2 font-medium text-white hover:bg-emerald-700 disabled:opacity-60; }
+.register__footer { @apply mt-4 text-center text-sm text-gray-600; }
+.register__link { @apply text-blue-600 hover:underline; }
+

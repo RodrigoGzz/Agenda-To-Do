@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
+import '@/css/pages/Register.css'
 
 export default function RegisterPage() {
   const { register, loading: authLoading } = useAuth()
@@ -19,7 +20,7 @@ export default function RegisterPage() {
     setError(null)
     setLoading(true)
     try {
-  await register(name, lastName, email, password)
+      await register(name, lastName, email, password)
       navigate('/', { replace: true })
     } catch (err: any) {
       setError(err?.message ?? 'Error al registrarse')
@@ -29,59 +30,59 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-md flex-col justify-center p-4">
-      <h1 className="mb-6 text-center text-2xl font-bold">Crear cuenta</h1>
-      <form onSubmit={onSubmit} className="space-y-3">
-        <label className="block">
-          <span className="mb-1 block text-sm">Nombre</span>
+    <div className="register">
+      <h1 className="register__title">Crear cuenta</h1>
+      <form onSubmit={onSubmit} className="register__form">
+        <label className="register__labelWrap">
+          <span className="register__label">Nombre</span>
           <input
-            className="w-full rounded-md border px-3 py-2"
+            className="register__input"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
           />
         </label>
-        <label className="block">
-          <span className="mb-1 block text-sm">Apellido</span>
+        <label className="register__labelWrap">
+          <span className="register__label">Apellido</span>
           <input
-            className="w-full rounded-md border px-3 py-2"
+            className="register__input"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             required
           />
         </label>
-        <label className="block">
-          <span className="mb-1 block text-sm">Email</span>
+        <label className="register__labelWrap">
+          <span className="register__label">Email</span>
           <input
             type="email"
-            className="w-full rounded-md border px-3 py-2"
+            className="register__input"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
         </label>
-        <label className="block">
-          <span className="mb-1 block text-sm">Contraseña</span>
+        <label className="register__labelWrap">
+          <span className="register__label">Contraseña</span>
           <input
             type="password"
-            className="w-full rounded-md border px-3 py-2"
+            className="register__input"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
         </label>
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="register__error">{error}</p>}
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full rounded-md bg-emerald-600 px-3 py-2 font-medium text-white hover:bg-emerald-700 disabled:opacity-60"
+          className="register__submit"
         >
           {isLoading ? 'Creando…' : 'Crear cuenta'}
         </button>
       </form>
-      <p className="mt-4 text-center text-sm text-gray-600">
+      <p className="register__footer">
         ¿Ya tienes cuenta?{' '}
-        <Link to="/login" className="text-blue-600 hover:underline">
+        <Link to="/login" className="register__link">
           Inicia sesión
         </Link>
       </p>

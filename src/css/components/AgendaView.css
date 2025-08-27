@@ -1,0 +1,36 @@
+/* Styles for AgendaView component */
+
+.agenda {
+	@apply rounded-xl border border-gray-200 bg-white p-4 shadow-sm;
+}
+.agenda__toolbar {
+	@apply mb-4 flex flex-wrap items-center justify-between gap-2;
+}
+.agenda__toolbarBtn {
+	@apply rounded-md border px-3 py-1 text-sm hover:bg-gray-50;
+}
+.agenda__select {
+	@apply rounded-md border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+.agenda__section {
+	@apply border-t first:border-t-0;
+}
+.agenda__sectionHeader {
+	@apply flex items-center justify-between gap-2 py-3;
+}
+.agenda__addBtn {
+	@apply rounded bg-gray-100 px-3 py-1 text-xs text-gray-700 hover:bg-gray-200;
+}
+.agenda__empty {
+	@apply mb-4 rounded border border-dashed p-4 text-center text-sm text-gray-500;
+}
+.agenda__list {
+	@apply mb-4 space-y-2;
+}
+.agenda__taskBtn {
+	@apply flex w-full flex-col rounded px-3 py-2 text-left text-sm text-white hover:opacity-90;
+}
+.agenda__taskBtn--completed {
+	@apply opacity-70 line-through;
+}
+

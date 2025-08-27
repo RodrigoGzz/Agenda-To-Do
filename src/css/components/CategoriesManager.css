@@ -1,0 +1,6 @@
+/* Styles for CategoriesManager component */
+
+.categories-manager__scroll {
+	@apply max-h-64 overflow-y-auto pr-1;
+}
+

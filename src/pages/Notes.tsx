@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import '@/css/pages/Notes.css'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { listNotes, createNote, updateNote, deleteNote, togglePinNote, type Note, type NoteData } from '../../backend/notes'
@@ -143,49 +144,49 @@ export default function NotesPage() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-4xl p-4">
-        <div className="text-center py-8">
-          <p className="text-gray-600">Cargando notas...</p>
+      <div className="notes__loading">
+        <div className="notes__loadingInner">
+          <p className="notes__loadingText">Cargando notas...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="mx-auto max-w-6xl p-4">
-      <div className="mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-4">
+    <div className="notes">
+      <div className="notes__toolbar">
+        <div className="notes__left">
           <Link
             to="/"
-            className="flex items-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm hover:bg-gray-50"
+            className="notes__backBtn"
           >
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="notes__backIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
             Volver al Calendario
           </Link>
-          <h1 className="text-2xl font-bold">Mis Notas</h1>
+          <h1 className="notes__title">Mis Notas</h1>
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
-          className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          className="notes__newBtn"
         >
           + Nueva Nota
         </button>
       </div>
 
       {notes.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-gray-500 mb-4">No tienes notas aún</p>
+        <div className="notes__empty">
+          <p className="notes__emptyText">No tienes notas aún</p>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="text-blue-600 hover:underline"
+            className="notes__emptyLink"
           >
             Crear tu primera nota
           </button>
         </div>
       ) : (
-        <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
+        <div className="notes__grid">
           {notes
             .sort((a, b) => {
               // First sort by pinned status (pinned notes first)
@@ -199,62 +200,58 @@ export default function NotesPage() {
             .map(note => {
             const copyableItems = extractCopyableText(note.noteDescription)
             return (
-              <div key={note.id} className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm min-h-[200px]">
-                <div className="mb-3 flex items-start justify-between">
-                  <h3 className="font-medium text-gray-900 text-lg">{note.title}</h3>
-                  <div className="flex gap-2 ml-3">
+              <div key={note.id} className="note">
+                <div className="note__header">
+                  <h3 className="note__title">{note.title}</h3>
+                  <div className="note__icons">
                     <button
                       onClick={() => handleTogglePin(note.id, note.pinned || false)}
-                      className={`${
-                        note.pinned 
-                          ? 'text-blue-600 hover:text-blue-700' 
-                          : 'text-gray-400 hover:text-blue-600'
-                      }`}
+                      className={`${note.pinned ? 'note__iconBtn--pinActive' : 'note__iconBtn'}`}
                       title={note.pinned ? 'Desfijar nota' : 'Fijar nota'}
                     >
-                      <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="note__icon" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                       </svg>
                     </button>
                     <button
                       onClick={() => setEditingNote(note)}
-                      className="text-gray-400 hover:text-blue-600"
+                      className="note__iconBtn"
                       title="Editar"
                     >
-                      <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="note__icon" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                       </svg>
                     </button>
                     <button
                       onClick={() => handleDeleteNote(note.id)}
-                      className="text-gray-400 hover:text-red-600"
+                      className="note__iconBtn note__iconBtn--danger"
                       title="Eliminar"
                     >
-                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="note__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     </button>
                   </div>
                 </div>
                 
-                <div className="mb-4 flex-1">
-                  <p className="text-sm text-gray-600 whitespace-pre-wrap leading-relaxed">
+                <div className="note__content">
+                  <p className="note__contentText">
                     {cleanDisplayText(note.noteDescription)}
                   </p>
                 </div>
 
                 {copyableItems.length > 0 && (
-                  <div className="mb-4 border-t pt-3">
-                    <p className="text-xs font-medium text-gray-500 mb-2">Texto copiable:</p>
-                    <div className="flex flex-wrap gap-2">
+                  <div className="note__copySection">
+                    <p className="note__copyLabel">Texto copiable:</p>
+                    <div className="note__copyList">
                       {copyableItems.map((item, index) => (
                         <button
                           key={index}
                           onClick={() => copyToClipboard(item.text)}
-                          className="inline-flex items-center gap-1 rounded bg-gray-100 px-2 py-1 text-xs text-gray-700 hover:bg-blue-100 hover:text-blue-700"
+                          className="note__copyBtn"
                           title={`Copiar: ${item.text}`}
                         >
-                          <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
+                          <svg className="note__copyIcon" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
                             <path d="M3 5a2 2 0 012-2 3 3 0 003 3h6a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L14.586 13H19v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11.586V9a1 1 0 00-1-1H8a1 1 0 00-1 1v2.586l.293-.293a1 1 0 011.414 0l2 2a1 1 0 001.414 0l2-2a1 1 0 011.414 0l.293.293z" />
                           </svg>
@@ -265,7 +262,7 @@ export default function NotesPage() {
                   </div>
                 )}
 
-                <div className="text-xs text-gray-400">
+                <div className="note__date">
                   {note.created_at?.toDate?.()?.toLocaleDateString() || 'Fecha no disponible'}
                 </div>
               </div>
@@ -345,78 +342,78 @@ function NoteModal({
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b px-6 py-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">{title}</h2>
+    <div className="notemodal__overlay">
+      <div className="notemodal__dialog">
+        <div className="notemodal__header">
+          <div className="notemodal__headerRow">
+            <h2 className="notemodal__title">{title}</h2>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600"
+              className="notemodal__close"
             >
-              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="notemodal__closeIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
         </div>
         
-        <form onSubmit={handleSubmit} className="p-6">
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+        <form onSubmit={handleSubmit} className="notemodal__form">
+          <div className="notemodal__field">
+            <label className="notemodal__label">
               Título
             </label>
             <input
               type="text"
               value={noteTitle}
               onChange={(e) => setNoteTitle(e.target.value)}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+              className="notemodal__input"
               placeholder="Título de la nota"
               required
             />
           </div>
 
-          <div className="mb-4">
+          <div className="notemodal__field">
             <div className="flex items-center justify-between mb-2">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="notemodal__label">
                 Contenido
               </label>
               <button
                 type="button"
                 onClick={() => setShowCopyField(!showCopyField)}
-                className="text-sm text-blue-600 hover:underline"
+                className="notemodal__toggleCopy"
               >
                 {showCopyField ? 'Cancelar' : 'Insertar texto copiable'}
               </button>
             </div>
             
             {showCopyField && (
-              <div className="mb-3 p-3 bg-gray-50 rounded-md">
-                <label className="block text-xs font-medium text-gray-600 mb-1">
+              <div className="notemodal__copyBox">
+                <label className="notemodal__copyLabel">
                   Texto para copiar fácilmente
                 </label>
-                <div className="space-y-2">
+                <div className="notemodal__copyFields">
                   <div>
                     <input
                       type="text"
                       value={copyableText}
                       onChange={(e) => setCopyableText(e.target.value)}
-                      className="w-full rounded border px-2 py-1 text-sm"
+                      className="notemodal__copyInput"
                       placeholder="Texto a copiar"
                     />
                   </div>
-                  <div className="flex gap-2">
+                  <div className="notemodal__copyRow">
                     <input
                       type="text"
                       value={copyableName}
                       onChange={(e) => setCopyableName(e.target.value)}
-                      className="flex-1 rounded border px-2 py-1 text-sm"
+                      className="notemodal__copyNameInput"
                       placeholder="Nombre a mostrar (opcional)"
                     />
                     <button
                       type="button"
                       onClick={insertCopyableText}
-                      className="rounded bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700"
+                      className="notemodal__insertBtn"
                     >
                       Insertar
                     </button>
@@ -428,24 +425,24 @@ function NoteModal({
             <textarea
               value={noteDescription}
               onChange={(e) => setNoteDescription(e.target.value)}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+              className="notemodal__textarea"
               rows={10}
               placeholder="Escribe el contenido de tu nota aquí..."
               required
             />
           </div>
 
-          <div className="flex gap-3 justify-end">
+          <div className="notemodal__actions">
             <button
               type="button"
               onClick={onClose}
-              className="rounded-md border border-gray-300 px-4 py-2 text-sm hover:bg-gray-50"
+              className="notemodal__btn"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+              className="notemodal__save"
             >
               Guardar
             </button>

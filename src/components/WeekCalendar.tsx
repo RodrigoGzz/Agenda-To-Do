@@ -1,4 +1,5 @@
 import React from 'react'
+import '@/css/components/WeekCalendar.css'
 import { addDays, formatISODate, getWeekDays } from '@/utils/date'
 import type { Task } from '@/types'
 
@@ -23,39 +24,38 @@ export default function WeekCalendar({ weekDate, onPrev, onNext, tasks, onClickD
   }, {})
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-      <div className="mb-3 flex items-center justify-between">
-        <button className="rounded-md border px-3 py-1 text-sm hover:bg-gray-50" onClick={onPrev}>
+    <div className="weekcal">
+      <div className="weekcal__toolbar">
+        <button className="weekcal__toolbarBtn" onClick={onPrev}>
           ◀ Semana anterior
         </button>
         <h2 className="text-lg font-semibold">{title}</h2>
-        <button className="rounded-md border px-3 py-1 text-sm hover:bg-gray-50" onClick={onNext}>
+        <button className="weekcal__toolbarBtn" onClick={onNext}>
           Semana siguiente ▶
         </button>
       </div>
-
-      <div className="grid grid-cols-7 gap-2">
+      <div className="weekcal__grid">
         {days.map((d, i) => {
           const iso = formatISODate(d)
           const dayTasks = tasksByDay[iso] || []
           return (
-            <div key={i} className="min-h-[140px] rounded border bg-white p-2">
-              <div className="mb-2 flex items-center justify-between">
+            <div key={i} className="weekcal__cell">
+              <div className="weekcal__cellHeader">
                 <div className="text-sm font-semibold">
                   {d.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric' })}
                 </div>
                 <button
-                  className="rounded bg-gray-100 px-2 text-[11px] text-gray-700 hover:bg-gray-200"
+                  className="weekcal__addBtn"
                   onClick={() => onClickDayAddTask(iso)}
                 >
                   + Tarea
                 </button>
               </div>
-              <div className="flex flex-col gap-1">
+              <div className="weekcal__tasks">
                 {dayTasks.map((t) => (
                   <button
                     key={t.id}
-                    className={`truncate rounded px-2 py-1 text-left text-xs text-white ${t.completed ? 'opacity-70 line-through' : ''}`}
+                    className={`weekcal__taskBtn ${t.completed ? 'weekcal__taskBtn--completed' : ''}`}
                     style={{ backgroundColor: t.color }}
                     onClick={() => onClickTask(t)}
                     title={`${t.title} — ${t.categoryName}`}

@@ -1,4 +1,5 @@
 import React from 'react'
+import '@/css/components/AgendaView.css'
 import { addDays, formatISODate } from '@/utils/date'
 import type { Task } from '@/types'
 
@@ -41,16 +42,16 @@ export default function AgendaView({ startDate, days = 7, tasks, onPrev, onNext,
   }, {})
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+    <div className="agenda">
+      <div className="agenda__toolbar">
         <div className="flex items-center gap-2">
-          <button className="rounded-md border px-3 py-1 text-sm hover:bg-gray-50" onClick={onPrev}>
+          <button className="agenda__toolbarBtn" onClick={onPrev}>
             ◀ Anterior
           </button>
-          <button className="rounded-md border px-3 py-1 text-sm hover:bg-gray-50" onClick={onToday}>
+          <button className="agenda__toolbarBtn" onClick={onToday}>
             Hoy
           </button>
-          <button className="rounded-md border px-3 py-1 text-sm hover:bg-gray-50" onClick={onNext}>
+          <button className="agenda__toolbarBtn" onClick={onNext}>
             Siguiente ▶
           </button>
         </div>
@@ -58,7 +59,7 @@ export default function AgendaView({ startDate, days = 7, tasks, onPrev, onNext,
           <label htmlFor="agenda-days" className="whitespace-nowrap">Mostrar:</label>
           <select
             id="agenda-days"
-            className="rounded-md border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="agenda__select"
             value={days}
             onChange={(e) => onChangeDays?.(parseInt(e.target.value))}
           >
@@ -76,26 +77,26 @@ export default function AgendaView({ startDate, days = 7, tasks, onPrev, onNext,
           const dayTasks = (tasksByDay[iso] || []).slice().sort((a, b) => a.title.localeCompare(b.title))
           const label = dayLabel(d, today)
           return (
-            <div key={idx} className="border-t first:border-t-0">
-              <div className="flex items-center justify-between gap-2 py-3">
+            <div key={idx} className="agenda__section">
+              <div className="agenda__sectionHeader">
                 <h3 className="text-base font-semibold capitalize">{label}</h3>
                 <button
-                  className="rounded bg-gray-100 px-3 py-1 text-xs text-gray-700 hover:bg-gray-200"
+                  className="agenda__addBtn"
                   onClick={() => onClickDayAddTask(iso)}
                 >
                   + Nueva tarea
                 </button>
               </div>
               {dayTasks.length === 0 ? (
-                <div className="mb-4 rounded border border-dashed p-4 text-center text-sm text-gray-500">
+                <div className="agenda__empty">
                   Nada planificado todavía
                 </div>
               ) : (
-                <ul className="mb-4 space-y-2">
+                <ul className="agenda__list">
                   {dayTasks.map((t) => (
                     <li key={t.id}>
                       <button
-                        className={`flex w-full flex-col rounded px-3 py-2 text-left text-sm text-white hover:opacity-90 ${t.completed ? 'opacity-70 line-through' : ''}`}
+                        className={`agenda__taskBtn ${t.completed ? 'agenda__taskBtn--completed' : ''}`}
                         style={{ backgroundColor: t.color }}
                         onClick={() => onClickTask(t)}
                         title={`${t.title} — ${t.categoryName}`}

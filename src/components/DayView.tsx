@@ -1,4 +1,5 @@
 import React from 'react'
+import '@/css/components/DayView.css'
 import { addDays, formatISODate } from '@/utils/date'
 import type { Task } from '@/types'
 
@@ -19,36 +20,36 @@ export default function DayView({ dayDate, onPrev, onNext, tasks, onClickDayAddT
   const title = dayDate.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-      <div className="mb-3 flex items-center justify-between">
-        <button className="rounded-md border px-3 py-1 text-sm hover:bg-gray-50" onClick={onPrev}>
+    <div className="dayview">
+      <div className="dayview__toolbar">
+        <button className="dayview__toolbarBtn" onClick={onPrev}>
           ◀ Día anterior
         </button>
         <h2 className="text-lg font-semibold capitalize">{title}</h2>
-        <button className="rounded-md border px-3 py-1 text-sm hover:bg-gray-50" onClick={onNext}>
+        <button className="dayview__toolbarBtn" onClick={onNext}>
           Día siguiente ▶
         </button>
       </div>
 
-      <div className="mb-3 flex justify-end">
+      <div className="dayview__addBtnWrap">
         <button
-          className="rounded bg-gray-100 px-3 py-1 text-sm text-gray-700 hover:bg-gray-200"
+          className="dayview__addBtn"
           onClick={() => onClickDayAddTask(iso)}
         >
           + Tarea
         </button>
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="dayview__tasks">
         {dayTasks.length === 0 && (
-          <div className="rounded border border-dashed p-4 text-center text-sm text-gray-500">
+          <div className="dayview__empty">
             No hay tareas para este día.
           </div>
         )}
         {dayTasks.map((t) => (
           <button
             key={t.id}
-            className={`flex w-full flex-col rounded px-3 py-2 text-left text-sm text-white hover:opacity-90 ${t.completed ? 'opacity-70 line-through' : ''}`}
+            className={`dayview__taskBtn ${t.completed ? 'dayview__taskBtn--completed' : ''}`}
             style={{ backgroundColor: t.color }}
             onClick={() => onClickTask(t)}
             title={`${t.title} — ${t.categoryName}`}
