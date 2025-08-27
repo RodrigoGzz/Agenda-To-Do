@@ -1,0 +1,67 @@
+.datepicker {
+  @apply relative w-full;
+}
+
+.datepicker__label {
+  @apply mb-1 block text-sm font-medium;
+}
+
+.datepicker__inputBtn {
+  @apply flex w-full items-center justify-between rounded-md border border-gray-300 bg-white p-2 text-left text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.datepicker__popover {
+  @apply absolute z-20 mt-2 w-72 rounded-lg border border-gray-200 bg-white p-2 shadow-xl;
+}
+
+.datepicker__header {
+  @apply mb-1 flex items-center justify-between px-1;
+}
+
+.datepicker__navBtn {
+  @apply rounded-md px-2 py-1 text-sm text-gray-700 hover:bg-gray-100;
+}
+
+.datepicker__month {
+  @apply text-sm font-semibold;
+}
+
+.datepicker__daynames {
+  @apply grid grid-cols-7 gap-1 px-1 pb-1 text-center text-xs text-gray-500;
+}
+
+.datepicker__dayname {
+  @apply py-1;
+}
+
+.datepicker__grid {
+  @apply grid grid-cols-7 gap-1;
+}
+
+.datepicker__cell {
+  @apply h-9 rounded-md text-center text-sm hover:bg-blue-50;
+}
+
+.datepicker__cell--other {
+  @apply text-gray-400;
+}
+
+.datepicker__cell--today {
+  @apply ring-1 ring-blue-400;
+}
+
+.datepicker__cell--selected {
+  @apply bg-blue-600 font-medium text-white hover:bg-blue-600;
+}
+
+.datepicker__footer {
+  @apply mt-2 flex items-center justify-between px-1;
+}
+
+.datepicker__todayBtn {
+  @apply rounded-md bg-blue-50 px-3 py-1.5 text-sm text-blue-700 hover:bg-blue-100;
+}
+
+.datepicker__closeBtn {
+  @apply rounded-md px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100;
+}

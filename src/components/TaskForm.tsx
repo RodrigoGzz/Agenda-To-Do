@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import '@/css/components/TaskForm.css'
 import type { Category, Task } from '@/types'
+import DatePicker from '@/components/DatePicker'
 
 type Props = {
   categories: Category[]
@@ -47,13 +48,11 @@ export default function TaskForm({ categories, defaultDate, initial, submitLabel
 
       <div className="task-form__grid">
         <div>
-          <label className="task-form__label">Fecha</label>
-          <input
-            type="date"
-            className="task-form__input"
+          <DatePicker
             value={date}
-            onChange={(e) => setDate(e.target.value)}
-            required
+            onChange={setDate}
+            label="Fecha"
+            placeholder="Selecciona una fecha"
           />
         </div>
 
@@ -87,13 +86,7 @@ export default function TaskForm({ categories, defaultDate, initial, submitLabel
           placeholder="Detalles de la tarea"
         />
       </div>
-
-  {/* Se removió el color personalizado opcional */}
-
-      <button
-        type="submit"
-        className="task-form__submit"
-      >
+      <button type="submit" className="task-form__submit">
         {submitLabel ?? 'Agregar tarea'}
       </button>
     </form>
