@@ -45,7 +45,6 @@ export default function NotesPage() {
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text)
-      alert('Texto copiado al portapapeles')
     } catch (err) {
       console.error('Error copying text: ', err)
       alert('Error al copiar el texto')
