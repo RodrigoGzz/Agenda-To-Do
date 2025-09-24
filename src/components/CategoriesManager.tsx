@@ -45,17 +45,20 @@ export default function CategoriesManager({ categories, tasks, onCreate, onDelet
               const count = taskCountByCat.get(c.id) || 0
               const status = taskStatusByCat.get(c.id) || { total: 0, completed: 0 }
               const allCompleted = status.total > 0 && status.completed === status.total
+              const pending = Math.max(0, status.total - status.completed)
               const canDelete = count === 0 || allCompleted
               return (
                 <li key={c.id} className="flex items-center justify-between rounded border px-3 py-2">
                   <div className="flex min-w-0 items-center gap-3">
                     <span className="h-4 w-4 rounded" style={{ backgroundColor: c.color }} />
                     <span className="truncate font-medium">{c.name}</span>
-                    <span className="text-xs text-gray-500">
-                      {count === 0 ? '0 tareas' : 
-                       allCompleted ? `${count} completadas` : 
-                       `${status.completed}/${status.total} completadas`}
-                    </span>
+                    {count === 0 ? (
+                      <span className="text-xs text-gray-500">0 tareas</span>
+                    ) : allCompleted ? null : (
+                      <span className="text-xs text-gray-500">
+                        {pending} {pending === 1 ? 'pendiente' : 'pendientes'}
+                      </span>
+                    )}
                   </div>
                   <button
                     className={`rounded px-2 py-1 text-xs ${canDelete ? 'bg-red-600 text-white hover:bg-red-700' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
