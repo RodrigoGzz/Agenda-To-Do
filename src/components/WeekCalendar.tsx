@@ -17,6 +17,7 @@ type Props = {
 export default function WeekCalendar({ weekDate, onPrev, onNext, tasks, onClickDayAddTask, onClickTask }: Props) {
   const days = getWeekDays(weekDate)
   const title = `${days[0].toLocaleDateString('es-ES')} - ${days[6].toLocaleDateString('es-ES')}`
+  const todayISO = formatISODate(new Date())
 
   const tasksByDay = tasks.reduce<Record<string, CalendarTask[]>>((acc, t) => {
     (acc[t.date] ||= []).push(t)
@@ -37,9 +38,10 @@ export default function WeekCalendar({ weekDate, onPrev, onNext, tasks, onClickD
       <div className="weekcal__grid">
         {days.map((d, i) => {
           const iso = formatISODate(d)
+          const isToday = iso === todayISO
           const dayTasks = tasksByDay[iso] || []
           return (
-            <div key={i} className="weekcal__cell">
+            <div key={i} className={`weekcal__cell ${isToday ? 'weekcal__cell--today' : ''}`}>
               <div className="weekcal__cellHeader">
                 <div className="text-sm font-semibold">
                   {d.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric' })}

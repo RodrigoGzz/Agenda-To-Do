@@ -18,6 +18,7 @@ export default function Calendar({ monthDate, onPrev, onNext, tasks, onClickDayA
   const matrix = getMonthMatrix(monthDate)
   const month = monthDate.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })
   const thisMonth = monthDate.getMonth()
+  const todayISO = formatISODate(new Date())
 
   const tasksByDay = tasks.reduce<Record<string, CalendarTask[]>>((acc, t) => {
     (acc[t.date] ||= []).push(t)
@@ -47,9 +48,12 @@ export default function Calendar({ monthDate, onPrev, onNext, tasks, onClickDayA
         {matrix.map((d, i) => {
           const iso = formatISODate(d)
           const isOtherMonth = d.getMonth() !== thisMonth
+          const isToday = iso === todayISO
           const dayTasks = tasksByDay[iso] || []
           return (
-            <div key={i} className={`calendar__cell ${isOtherMonth ? 'calendar__cell--other' : ''}`}>
+            <div
+              key={i}
+              className={`calendar__cell ${isOtherMonth ? 'calendar__cell--other' : ''} ${isToday ? 'calendar__cell--today' : ''}`}>
               <div className="calendar__cellHeader">
                 <div className="text-xs font-semibold">{d.getDate()}</div>
                 <button

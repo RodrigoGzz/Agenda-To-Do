@@ -31,3 +31,22 @@
 	@apply opacity-70 line-through;
 }
 
+/* Highlight today's cell */
+.weekcal__cell--today {
+	background-color: rgba(99,102,241,0.06); /* very light indigo tint */
+	border: 1px solid rgba(79,70,229,0.12); /* thin indigo border */
+}
+.weekcal__cell--today .weekcal__cellHeader .text-sm {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 1.3rem;
+	height: 1.3rem;
+	padding: 0 .2rem;
+	border-radius: 9999px;
+	background-color: #4f46e5; /* indigo-600 */
+	color: #ffffff;
+	font-weight: 600;
+	font-size: 0.875rem;
+}
+
