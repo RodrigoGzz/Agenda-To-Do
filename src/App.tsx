@@ -303,6 +303,11 @@ export default function App() {
           monthDate={monthDate}
           onPrev={() => setMonthDate((d) => addMonths(d, -1))}
           onNext={() => setMonthDate((d) => addMonths(d, 1))}
+          onToday={() => {
+            const t = new Date()
+            t.setDate(1)
+            setMonthDate(t)
+          }}
           tasks={tasksForViews}
           onClickDayAddTask={(date) => setShowTaskModal({ open: true, date })}
           onClickTask={(task) => {
@@ -338,6 +343,7 @@ export default function App() {
           weekDate={weekDate}
           onPrev={() => setWeekDate((d) => new Date(d.getFullYear(), d.getMonth(), d.getDate() - 7))}
           onNext={() => setWeekDate((d) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + 7))}
+          onToday={() => setWeekDate(new Date())}
           tasks={tasksForViews}
           onClickDayAddTask={(date) => setShowTaskModal({ open: true, date })}
           onClickTask={(task) => {
@@ -351,6 +357,7 @@ export default function App() {
           dayDate={dayDate}
           onPrev={() => setDayDate((d) => new Date(d.getFullYear(), d.getMonth(), d.getDate() - 1))}
           onNext={() => setDayDate((d) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1))}
+          onToday={() => setDayDate(new Date())}
           tasks={tasksForViews}
           onClickDayAddTask={(date) => setShowTaskModal({ open: true, date })}
           onClickTask={(task) => setShowTaskDetail(task)}

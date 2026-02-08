@@ -9,12 +9,13 @@ type Props = {
   weekDate: Date
   onPrev: () => void
   onNext: () => void
+  onToday: () => void
   tasks: CalendarTask[]
   onClickDayAddTask: (isoDate: string) => void
   onClickTask: (task: CalendarTask) => void
 }
 
-export default function WeekCalendar({ weekDate, onPrev, onNext, tasks, onClickDayAddTask, onClickTask }: Props) {
+export default function WeekCalendar({ weekDate, onPrev, onNext, onToday, tasks, onClickDayAddTask, onClickTask }: Props) {
   const days = getWeekDays(weekDate)
   const title = `${days[0].toLocaleDateString('es-ES')} - ${days[6].toLocaleDateString('es-ES')}`
   const todayISO = formatISODate(new Date())
@@ -30,7 +31,12 @@ export default function WeekCalendar({ weekDate, onPrev, onNext, tasks, onClickD
         <button className="weekcal__toolbarBtn" onClick={onPrev}>
           ◀ Semana anterior
         </button>
-        <h2 className="text-lg font-semibold">{title}</h2>
+        <div className="weekcal__toolbarCenter">
+          <h2 className="text-lg font-semibold">{title}</h2>
+          <button className="weekcal__todayBtn" onClick={onToday}>
+            Hoy
+          </button>
+        </div>
         <button className="weekcal__toolbarBtn" onClick={onNext}>
           Semana siguiente ▶
         </button>

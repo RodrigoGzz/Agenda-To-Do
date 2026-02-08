@@ -9,12 +9,13 @@ type Props = {
   monthDate: Date
   onPrev: () => void
   onNext: () => void
+  onToday: () => void
   tasks: CalendarTask[]
   onClickDayAddTask: (isoDate: string) => void
   onClickTask: (task: CalendarTask) => void
 }
 
-export default function Calendar({ monthDate, onPrev, onNext, tasks, onClickDayAddTask, onClickTask }: Props) {
+export default function Calendar({ monthDate, onPrev, onNext, onToday, tasks, onClickDayAddTask, onClickTask }: Props) {
   const matrix = getMonthMatrix(monthDate)
   const month = monthDate.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })
   const thisMonth = monthDate.getMonth()
@@ -31,7 +32,12 @@ export default function Calendar({ monthDate, onPrev, onNext, tasks, onClickDayA
         <button className="calendar__toolbarBtn" onClick={onPrev}>
           ◀ Mes anterior
         </button>
-        <h2 className="text-lg font-semibold capitalize">{month}</h2>
+        <div className="calendar__toolbarCenter">
+          <h2 className="text-lg font-semibold capitalize">{month}</h2>
+          <button className="calendar__todayBtn" onClick={onToday}>
+            Hoy
+          </button>
+        </div>
         <button className="calendar__toolbarBtn" onClick={onNext}>
           Mes siguiente ▶
         </button>

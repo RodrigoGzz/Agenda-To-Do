@@ -6,8 +6,14 @@
 .calendar__toolbar {
 	@apply mb-3 flex items-center justify-between;
 }
+.calendar__toolbarCenter {
+	@apply flex items-center gap-2;
+}
 .calendar__toolbarBtn {
 	@apply rounded-md border px-3 py-1 text-sm hover:bg-gray-50;
+}
+.calendar__todayBtn {
+	@apply rounded-md bg-emerald-600 px-3 py-1 text-sm font-medium text-white hover:bg-emerald-700;
 }
 .calendar__daynames {
 	@apply grid grid-cols-7 text-center text-xs font-medium text-gray-600;
@@ -59,4 +65,3 @@
 	font-weight: 600;
 	font-size: 0.75rem;
 }
-

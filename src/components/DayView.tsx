@@ -9,12 +9,13 @@ type Props = {
   dayDate: Date
   onPrev: () => void
   onNext: () => void
+  onToday: () => void
   tasks: CalendarTask[]
   onClickDayAddTask: (isoDate: string) => void
   onClickTask: (task: CalendarTask) => void
 }
 
-export default function DayView({ dayDate, onPrev, onNext, tasks, onClickDayAddTask, onClickTask }: Props) {
+export default function DayView({ dayDate, onPrev, onNext, onToday, tasks, onClickDayAddTask, onClickTask }: Props) {
   const iso = formatISODate(dayDate)
   const dayTasks = tasks.filter((t) => t.date === iso)
   const title = dayDate.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
@@ -25,7 +26,12 @@ export default function DayView({ dayDate, onPrev, onNext, tasks, onClickDayAddT
         <button className="dayview__toolbarBtn" onClick={onPrev}>
           ◀ Día anterior
         </button>
-        <h2 className="text-lg font-semibold capitalize">{title}</h2>
+        <div className="dayview__toolbarCenter">
+          <h2 className="text-lg font-semibold capitalize">{title}</h2>
+          <button className="dayview__todayBtn" onClick={onToday}>
+            Hoy
+          </button>
+        </div>
         <button className="dayview__toolbarBtn" onClick={onNext}>
           Día siguiente ▶
         </button>
